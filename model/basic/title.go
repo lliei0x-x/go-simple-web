@@ -1,4 +1,4 @@
-package model
+package basic
 
 // BasicTitle ...
 type BasicTitle struct {
