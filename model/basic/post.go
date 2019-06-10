@@ -1,4 +1,4 @@
-package model
+package basic
 
 // Post ...
 type Post struct {

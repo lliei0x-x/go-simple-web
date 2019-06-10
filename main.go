@@ -1,11 +1,13 @@
 package main
 
 import (
-	"go-web/common"
 	"html/template"
 	"log"
 	"net/http"
 	"strings"
+
+	"go-web/common"
+	"go-web/model"
 )
 
 const (
@@ -30,9 +32,13 @@ func main() {
 			if strings.Contains(v, "_base.html") {
 				layout = template.Must(template.ParseFiles(v))
 			} else {
+
+				indexVM := model.IndexVMInstance{}
+				ivm := indexVM.GetIndexVM()
+
 				tmpl = template.Must(layout.Clone())
 				_, err = tmpl.ParseFiles(v)
-				tmpl.Execute(w, indexViewModel)
+				tmpl.Execute(w, &ivm)
 			}
 		}
 	})
