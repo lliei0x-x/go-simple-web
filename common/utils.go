@@ -2,6 +2,7 @@ package common
 
 import (
 	"io/ioutil"
+	"regexp"
 	"strings"
 )
 
@@ -31,5 +32,14 @@ func GetAllFiles(dirPth string, temps []string, match string) (files []string, e
 			}
 		}
 	}
-	return files, nil
+	return
+}
+
+// MatchModelName Regular match name and tag by filename
+func MatchModelName(fileName string) (name string) {
+	pattern := `([^/\\\\]+).html`
+	fileNameRegexp := regexp.MustCompile(pattern)
+	params := fileNameRegexp.FindStringSubmatch(fileName)
+	name = params[1]
+	return
 }
