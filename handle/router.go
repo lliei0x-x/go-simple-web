@@ -6,4 +6,5 @@ import "net/http"
 func RegisterRouter() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandle)
+	http.ListenAndServe(":8080", nil)
 }
