@@ -3,13 +3,11 @@ package handle
 import (
 	"net/http"
 
-	"go-web/model"
+	"go-web/model/vmodel"
 )
 
-var errInfos []string
-
 func loginHandle(w http.ResponseWriter, r *http.Request) {
-	loginVM := model.LoginVMInstance{}
+	loginVM := vmodel.LoginVMInstance{}
 	vm := loginVM.GetLoginVM()
 	if r.Method == http.MethodGet {
 		templates["login"].Execute(w, &vm)
@@ -20,18 +18,18 @@ func loginHandle(w http.ResponseWriter, r *http.Request) {
 		password := r.Form.Get("password")
 
 		if len(username) < 3 {
-			addErrInfo("username must longer than 3")
+			vm.AddErrInfo("username must longer than 3")
 		}
 
 		if len(password) < 6 {
-			addErrInfo("password must longer than 6")
+			vm.AddErrInfo("password must longer than 6")
 		}
 
 		if !check(username, password) {
-			addErrInfo("username password not correct, please input again")
+			vm.AddErrInfo("username password not correct, please input again")
 		}
 
-		if len(errInfos) > 0 {
+		if len(vm.ErrInfos) > 0 {
 			templates["login"].Execute(w, &vm)
 		} else {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -44,9 +42,4 @@ func check(username, password string) bool {
 		return true
 	}
 	return false
-}
-
-// AddErrInfo ...
-func addErrInfo(errInfo string) {
-	errInfos = append(errInfos, errInfo)
 }
