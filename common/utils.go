@@ -1,6 +1,8 @@
 package common
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"io/ioutil"
 	"regexp"
 	"strings"
@@ -42,4 +44,12 @@ func MatchModelName(fileName string) (name string) {
 	params := fileNameRegexp.FindStringSubmatch(fileName)
 	name = params[1]
 	return
+}
+
+// GeneratePasswordHash : Use MD5
+func GeneratePasswordHash(pwd string) string {
+	hasher := md5.New()
+	hasher.Write([]byte(pwd))
+	pwdHash := hex.EncodeToString(hasher.Sum(nil))
+	return pwdHash
 }
