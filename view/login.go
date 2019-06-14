@@ -1,12 +1,8 @@
 package view
 
-import (
-	"go-simple-web/view/basic"
-)
-
 // LoginVM login View Model
 type LoginVM struct {
-	basic.BasicTitle
+	BaseViewModel
 	ErrInfos []string
 }
 
@@ -16,7 +12,7 @@ type LoginVMInstance struct{}
 // GetLoginVM ...
 func (LoginVMInstance) GetLoginVM() LoginVM {
 	vm := LoginVM{}
-	vm.SetBasicTitle("Login")
+	vm.SetTitle("Login")
 	return vm
 }
 

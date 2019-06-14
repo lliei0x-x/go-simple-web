@@ -1,14 +1,14 @@
 package view
 
 import (
-	"go-simple-web/view/basic"
+	"go-simple-web/model"
 )
 
 // IndexVM Index View Model
 type IndexVM struct {
-	basic.BasicTitle
-	basic.User
-	Posts []basic.Post
+	BaseViewModel
+	model.User
+	Posts []model.Post
 }
 
 // IndexVMInstance ...
@@ -16,14 +16,9 @@ type IndexVMInstance struct{}
 
 // GetIndexVM ...
 func (IndexVMInstance) GetIndexVM() IndexVM {
-	u1 := basic.User{Username: "bonfy"}
-	u2 := basic.User{Username: "rene"}
+	user, _ := model.GetUserByUsername("rene")
+	posts, _ := model.GetPostsByUserID(user.ID)
 
-	posts := []basic.Post{
-		basic.Post{User: u1, Body: "Beautiful day in Portland!"},
-		basic.Post{User: u2, Body: "The Avengers movie was so cool!"},
-	}
-
-	vm := IndexVM{basic.BasicTitle{Title: "leeifme"}, u1, posts}
+	vm := IndexVM{BaseViewModel{Title: "HomePage"}, *user, *posts}
 	return vm
 }
