@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"go-web/common"
+	"go-simple-web/common"
 )
 
 var templates map[string]*template.Template

@@ -1,8 +1,8 @@
 ---
 db:
   dbname: "postgres"
-  host: "192.168.50.124"
-  port: "30923"
+  host: "$host"
+  port: "$port"
   user: "postgres"
   password: "postgres"
   sslmode: "disable"

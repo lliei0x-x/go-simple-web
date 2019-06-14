@@ -1,7 +1,7 @@
-package vmodel
+package view
 
 import (
-	"go-web/model/basic"
+	"go-simple-web/view/basic"
 )
 
 // IndexVM Index View Model

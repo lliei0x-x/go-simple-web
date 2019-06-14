@@ -3,11 +3,11 @@ package handle
 import (
 	"net/http"
 
-	"go-web/model/vmodel"
+	"go-simple-web/view"
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	indexVM := vmodel.IndexVMInstance{}
+	indexVM := view.IndexVMInstance{}
 	vm := indexVM.GetIndexVM()
 	templates["index"].Execute(w, &vm)
 }
