@@ -3,11 +3,11 @@ package handle
 import (
 	"net/http"
 
-	"go-web/model/vmodel"
+	"go-simple-web/view"
 )
 
 func loginHandle(w http.ResponseWriter, r *http.Request) {
-	loginVM := vmodel.LoginVMInstance{}
+	loginVM := view.LoginVMInstance{}
 	vm := loginVM.GetLoginVM()
 	if r.Method == http.MethodGet {
 		templates["login"].Execute(w, &vm)

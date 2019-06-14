@@ -1,9 +1,9 @@
 package main
 
 import (
-	"go-web/config"
-	"go-web/handle"
-	"go-web/model"
+	"go-simple-web/config"
+	"go-simple-web/handle"
+	"go-simple-web/model"
 )
 
 func main() {
@@ -12,6 +12,7 @@ func main() {
 	createTable()
 	defer config.POSTGRES.Close()
 
+	// register
 	handle.RegisterRouter()
 
 }

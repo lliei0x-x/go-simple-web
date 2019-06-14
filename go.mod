@@ -1,4 +1,4 @@
-module go-web
+module go-simple-web
 
 go 1.12
 
