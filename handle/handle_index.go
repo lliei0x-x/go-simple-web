@@ -8,6 +8,7 @@ import (
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	indexVM := view.IndexVMInstance{}
-	vm := indexVM.GetIndexVM()
+	username, _ := getSessionUser(r)
+	vm := indexVM.GetIndexVM(username)
 	templates["index"].Execute(w, &vm)
 }

@@ -1,8 +1,11 @@
 ---
 db:
   dbname: "postgres"
-  host: "$host"
-  port: "$port"
+  host: "$HOST"
+  port: "$PORT"
   user: "postgres"
   password: "postgres"
   sslmode: "disable"
+session:
+  store: "something-very-secret"
+  sessionName: "go-simple-web"
