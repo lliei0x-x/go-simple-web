@@ -1,10 +1,15 @@
 package handle
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/gorilla/context"
+)
 
 // RegisterRouter ...
 func RegisterRouter() {
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/", middleAuth(indexHandler))
 	http.HandleFunc("/login", loginHandle)
-	http.ListenAndServe(":8080", nil)
+	http.HandleFunc("/logout", middleAuth(logoutHandler))
+	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))
 }
