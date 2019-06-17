@@ -12,7 +12,7 @@ type LoginVMInstance struct{}
 // GetLoginVM ...
 func (LoginVMInstance) GetLoginVM() LoginVM {
 	vm := LoginVM{}
-	vm.SetTitle("Login")
+	vm.setTitle("Login")
 	return vm
 }
 

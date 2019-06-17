@@ -36,3 +36,10 @@ func getPostgreConfg() string {
 
 	return fmt.Sprintf("host=%s user=%s dbname=%s port=%s sslmode=%s password=%s", host, user, dbName, port, sslMode, password)
 }
+
+// GetSessionConfig func
+func GetSessionConfig() (store string, sessionName string) {
+	store = viper.GetString("session.store")
+	sessionName = viper.GetString("session.sessionName")
+	return
+}
