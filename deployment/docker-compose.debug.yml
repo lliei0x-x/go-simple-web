@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  go-simple-web:
+    image: go-simple-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+        - 8080:3015
