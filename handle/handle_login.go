@@ -1,8 +1,10 @@
 package handle
 
 import (
+	"log"
 	"net/http"
 
+	"go-simple-web/model"
 	"go-simple-web/view"
 )
 
@@ -25,21 +27,25 @@ func loginHandle(w http.ResponseWriter, r *http.Request) {
 			vm.AddErrInfo("password must longer than 6")
 		}
 
-		if !check(username, password) {
+		if !checkLogin(username, password) {
 			vm.AddErrInfo("username password not correct, please input again")
 		}
 
 		if len(vm.ErrInfos) > 0 {
 			templates["login"].Execute(w, &vm)
 		} else {
+			setSessionUser(w, r, username)
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 	}
 }
 
-func check(username, password string) bool {
-	if username == "leeifme" && password == "123456" {
-		return true
+func checkLogin(username, password string) bool {
+	user, err := model.GetUserByUsername(username)
+	if err != nil {
+		log.Println("Can not find username: ", username)
+		log.Println("Error:", err)
+		return false
 	}
-	return false
+	return user.CheckPassword(password)
 }

@@ -15,10 +15,11 @@ type IndexVM struct {
 type IndexVMInstance struct{}
 
 // GetIndexVM ...
-func (IndexVMInstance) GetIndexVM() IndexVM {
-	user, _ := model.GetUserByUsername("rene")
+func (IndexVMInstance) GetIndexVM(username string) IndexVM {
+	user, _ := model.GetUserByUsername(username)
 	posts, _ := model.GetPostsByUserID(user.ID)
 
 	vm := IndexVM{BaseViewModel{Title: "HomePage"}, *user, *posts}
+	vm.setCurrentUser(username)
 	return vm
 }
