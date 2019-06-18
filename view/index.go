@@ -19,7 +19,11 @@ func (IndexVMInstance) GetIndexVM(username string) IndexVM {
 	user, _ := model.GetUserByUsername(username)
 	posts, _ := model.GetPostsByUserID(user.ID)
 
-	vm := IndexVM{BaseViewModel{Title: "HomePage"}, *user, *posts}
+	vm := IndexVM{}
+	vm.setTitle("HomePage")
+	vm.User = *user
+	vm.Posts = *posts
 	vm.setCurrentUser(username)
+
 	return vm
 }

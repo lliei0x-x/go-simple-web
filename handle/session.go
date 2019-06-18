@@ -2,7 +2,6 @@ package handle
 
 import (
 	"errors"
-	"log"
 	"net/http"
 
 	"go-simple-web/config"
@@ -29,12 +28,10 @@ func getSessionUser(r *http.Request) (string, error) {
 	}
 
 	val := session.Values["user"]
-	log.Println("val:", val)
 	username, ok := val.(string)
 	if !ok {
 		return "", errors.New("can not get session user")
 	}
-	log.Println("username:", username)
 	return username, nil
 }
 
