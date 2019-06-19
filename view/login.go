@@ -17,6 +17,6 @@ func (LoginVMInstance) GetVM() LoginVM {
 }
 
 // AddErrInfo func
-func (v *LoginVM) AddErrInfo(s string) {
-	v.ErrInfos = append(v.ErrInfos, s)
+func (v *LoginVM) AddErrInfo(errs ...string) {
+	v.ErrInfos = append(v.ErrInfos, errs...)
 }
