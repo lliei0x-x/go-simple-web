@@ -9,11 +9,11 @@ import (
 )
 
 // ProfileHandler func
-func ProfileHandler(w http.ResponseWriter, r *http.Request) {
+func profileHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pUser := vars["username"]
 	profileVM := view.ProfileVMInstance{}
 	cUser, _ := getSessionUser(r)
-	vm := profileVM.GetProfileVM(cUser, pUser)
+	vm := profileVM.GetVM(cUser, pUser)
 	templates["profile"].Execute(w, &vm)
 }

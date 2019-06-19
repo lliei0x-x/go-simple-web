@@ -8,9 +8,9 @@ import (
 	"go-simple-web/view"
 )
 
-func loginHandle(w http.ResponseWriter, r *http.Request) {
+func loginHandler(w http.ResponseWriter, r *http.Request) {
 	loginVM := view.LoginVMInstance{}
-	vm := loginVM.GetLoginVM()
+	vm := loginVM.GetVM()
 	if r.Method == http.MethodGet {
 		templates["login"].Execute(w, &vm)
 	}
