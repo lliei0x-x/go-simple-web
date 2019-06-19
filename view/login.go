@@ -6,17 +6,17 @@ type LoginVM struct {
 	ErrInfos []string
 }
 
-// LoginVMInstance ...
+// LoginVMInstance struct
 type LoginVMInstance struct{}
 
-// GetLoginVM ...
-func (LoginVMInstance) GetLoginVM() LoginVM {
+// GetVM func
+func (LoginVMInstance) GetVM() LoginVM {
 	vm := LoginVM{}
 	vm.setTitle("Login")
 	return vm
 }
 
-// AddErrInfo ...
+// AddErrInfo func
 func (v *LoginVM) AddErrInfo(s string) {
 	v.ErrInfos = append(v.ErrInfos, s)
 }

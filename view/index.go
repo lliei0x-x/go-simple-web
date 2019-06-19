@@ -14,8 +14,8 @@ type IndexVM struct {
 // IndexVMInstance ...
 type IndexVMInstance struct{}
 
-// GetIndexVM ...
-func (IndexVMInstance) GetIndexVM(username string) IndexVM {
+// GetVM func
+func (IndexVMInstance) GetVM(username string) IndexVM {
 	user, _ := model.GetUserByUsername(username)
 	posts, _ := model.GetPostsByUserID(user.ID)
 
