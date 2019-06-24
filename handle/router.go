@@ -17,6 +17,8 @@ func RegisterRouter() {
 	r.HandleFunc("/logout", middleAuth(logoutHandler))
 	r.HandleFunc("/user/{username}", middleAuth(profileHandler))
 	r.HandleFunc("/profile_edit", middleAuth(profileEditHandler))
+	r.HandleFunc("/follow/{username}", middleAuth(followHandler))
+	r.HandleFunc("/unfollow/{username}", middleAuth(unFollowHandler))
 	http.Handle("/", r)
 
 	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))
