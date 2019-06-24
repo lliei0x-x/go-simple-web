@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"go-simple-web/config"
 )
 
 // Post struct
@@ -18,8 +16,14 @@ type Post struct {
 // GetPostsByUserID func
 func GetPostsByUserID(id int) (*[]Post, error) {
 	var posts []Post
-	if err := config.POSTGRES.Preload("User").Where("user_id=?", id).Find(&posts).Error; err != nil {
+	if err := db.Preload("User").Where("user_id=?", id).Find(&posts).Error; err != nil {
 		return nil, err
 	}
 	return &posts, nil
+}
+
+// CreatePost func
+func (u *User) CreatePost(body string) error {
+	post := Post{Body: body, UserID: u.ID}
+	return db.Create(&post).Error
 }

@@ -8,6 +8,8 @@ import (
 	"go-simple-web/config"
 )
 
+var db = config.POSTGRES
+
 // User struct
 type User struct {
 	ID           int    `gorm:"primary_key"`
@@ -34,7 +36,7 @@ func (u *User) CheckPassword(pwd string) bool {
 // GetUserByUsername ...
 func GetUserByUsername(username string) (*User, error) {
 	var user User
-	if err := config.POSTGRES.Where("username=?", username).Find(&user).Error; err != nil {
+	if err := db.Where("username=?", username).Find(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -51,7 +53,7 @@ func UpdateUserByUsername(username string, contents map[string]interface{}) erro
 	if err != nil {
 		return err
 	}
-	return config.POSTGRES.Model(u).Update(contents).Error
+	return db.Model(u).Update(contents).Error
 }
 
 // UpdateLastSeen func
@@ -71,5 +73,8 @@ func AddUser(username, password, email string) error {
 	user := User{Username: username, Email: email}
 	user.SetPasswordHash(password)
 	user.SetAvatar(email)
-	return config.POSTGRES.Create(&user).Error
+	if err := db.Create(&user).Error; err != nil {
+		return err
+	}
+	return user.FollowSelf()
 }
