@@ -8,9 +8,12 @@ import (
 // ProfileVM struct
 type ProfileVM struct {
 	BaseViewModel
-	Editable    bool
-	Posts       []model.Post
-	ProfileUser model.User
+	Editable       bool
+	IsFollow       bool
+	FollowersCount int
+	FollowingCount int
+	Posts          []model.Post
+	ProfileUser    model.User
 }
 
 // ProfileVMInstance struct
@@ -28,6 +31,11 @@ func (ProfileVMInstance) GetVM(cUser, pUser string) ProfileVM {
 	vm.ProfileUser = *user
 	vm.setTime()
 	vm.setCurrentUser(cUser)
+	if !vm.Editable {
+		vm.IsFollow = user.IsFollowedByUser(cUser)
+	}
+	vm.FollowersCount = user.FollowersCount()
+	vm.FollowingCount = user.FollowingCount()
 
 	return *vm
 }

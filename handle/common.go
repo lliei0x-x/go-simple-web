@@ -60,7 +60,7 @@ func checkLogin(username, password string) []string {
 	if errCheck := checkPassword(password); len(errCheck) > 0 {
 		errs = append(errs, errCheck)
 	}
-	if errCheck := checkUserPassword(username, password); errCheck {
+	if errCheck := checkUserPassword(username, password); !errCheck {
 		errs = append(errs, "Username or password is not correct")
 	}
 	return errs

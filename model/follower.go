@@ -30,7 +30,7 @@ func (u *User) FollowSelf() error {
 
 // FollowersCount func
 func (u *User) FollowersCount() int {
-	return db.Model(u).Association("Followers").Count()
+	return db.Model(u).Association("Followers").Count() - 1
 }
 
 // FollowingIDs func
