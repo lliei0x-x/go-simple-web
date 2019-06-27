@@ -38,8 +38,9 @@ func getPostgreConfg() string {
 }
 
 // GetSessionConfig func
-func GetSessionConfig() (store string, sessionName string) {
+func GetSessionConfig() (store, sessionName, flashName string) {
 	store = viper.GetString("session.store")
 	sessionName = viper.GetString("session.sessionName")
+	flashName = viper.GetString("session.flashName")
 	return
 }

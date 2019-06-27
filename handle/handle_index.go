@@ -1,6 +1,7 @@
 package handle
 
 import (
+	"log"
 	"net/http"
 
 	"go-simple-web/view"
@@ -9,6 +10,25 @@ import (
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	indexVM := view.IndexVMInstance{}
 	username, _ := getSessionUser(r)
-	vm := indexVM.GetVM(username)
-	templates["index"].Execute(w, &vm)
+	flash := getFlash(w, r)
+	vm := indexVM.GetVM(username, flash)
+	if r.Method == http.MethodGet {
+		templates["index"].Execute(w, &vm)
+	}
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		body := r.Form.Get("body")
+		errMessage := checkLen("Post", body, 1, 180)
+		if errMessage != "" {
+			setFlash(w, r, errMessage)
+		} else {
+			err := view.CreatePost(username, body)
+			if err != nil {
+				log.Println("add Post error:", err)
+				w.Write([]byte("Error insert Post in database"))
+				return
+			}
+		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
 }
