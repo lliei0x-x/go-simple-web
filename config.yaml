@@ -9,3 +9,4 @@ db:
 session:
   store: "something-very-secret"
   sessionName: "go-simple-web"
+  flashName: "go-flash"

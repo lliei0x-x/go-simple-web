@@ -2,6 +2,7 @@ package handle
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"go-simple-web/config"
@@ -11,13 +12,15 @@ import (
 
 var (
 	sessionName string
+	flashName   string
 	store       *sessions.CookieStore
 )
 
 func init() {
-	s1, s2 := config.GetSessionConfig()
+	s1, s2, s3 := config.GetSessionConfig()
 	store = sessions.NewCookieStore([]byte(s1))
 	sessionName = s2
+	flashName = s3
 }
 
 func getSessionUser(r *http.Request) (string, error) {
@@ -62,4 +65,20 @@ func clearSession(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return nil
+}
+
+func setFlash(w http.ResponseWriter, r *http.Request, message string) {
+	session, _ := store.Get(r, sessionName)
+	session.AddFlash(message, flashName)
+	session.Save(r, w)
+}
+
+func getFlash(w http.ResponseWriter, r *http.Request) string {
+	session, _ := store.Get(r, sessionName)
+	fm := session.Flashes(flashName)
+	if fm == nil {
+		return ""
+	}
+	session.Save(r, w)
+	return fmt.Sprintf("%v", fm[0])
 }
