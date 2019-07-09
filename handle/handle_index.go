@@ -11,7 +11,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	indexVM := view.IndexVMInstance{}
 	username, _ := getSessionUser(r)
 	flash := getFlash(w, r)
-	vm := indexVM.GetVM(username, flash)
+	page := getPage(r)
+	vm := indexVM.GetVM(username, flash, page, pageLimit)
 	if r.Method == http.MethodGet {
 		templates["index"].Execute(w, &vm)
 	}

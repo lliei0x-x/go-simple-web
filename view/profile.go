@@ -8,6 +8,7 @@ import (
 // ProfileVM struct
 type ProfileVM struct {
 	BaseViewModel
+	PageViewModel
 	Editable       bool
 	IsFollow       bool
 	FollowersCount int
@@ -20,9 +21,10 @@ type ProfileVM struct {
 type ProfileVMInstance struct{}
 
 // GetVM func
-func (ProfileVMInstance) GetVM(cUser, pUser string) ProfileVM {
+func (ProfileVMInstance) GetVM(cUser, pUser string, page, limit int) ProfileVM {
 	user, _ := model.GetUserByUsername(pUser)
-	posts, _ := model.GetPostsByUserID(user.ID)
+	// posts, _ := model.GetPostsByUserID(user.ID)
+	posts, total, _ := model.GetPostsByUserIDPageAndLimit(user.ID, page, limit)
 
 	vm := &ProfileVM{}
 	vm.setTitle("Profile")
@@ -36,6 +38,7 @@ func (ProfileVMInstance) GetVM(cUser, pUser string) ProfileVM {
 	}
 	vm.FollowersCount = user.FollowersCount()
 	vm.FollowingCount = user.FollowingCount()
+	vm.setPageViewModel(total, page, limit)
 
 	return *vm
 }

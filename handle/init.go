@@ -11,7 +11,8 @@ import (
 var templates map[string]*template.Template
 
 const (
-	dirPath = "./template"
+	dirPath   = "./template"
+	pageLimit = 5
 )
 
 func init() {

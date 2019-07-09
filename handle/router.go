@@ -12,6 +12,7 @@ func RegisterRouter() {
 	r := mux.NewRouter() // 匹配
 
 	r.HandleFunc("/", middleAuth(indexHandler))
+	r.HandleFunc("/explore", middleAuth(exploreHandler))
 	r.HandleFunc("/register", registerHandle)
 	r.HandleFunc("/login", loginHandler)
 	r.HandleFunc("/logout", middleAuth(logoutHandler))

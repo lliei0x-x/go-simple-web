@@ -3,7 +3,9 @@ package handle
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"regexp"
+	"strconv"
 
 	"go-simple-web/model"
 )
@@ -84,4 +86,20 @@ func checkRegister(username, email, pwd, repwd string) []string {
 		errs = append(errs, "Username already exist, please choose another username")
 	}
 	return errs
+}
+
+func getPage(r *http.Request) int {
+	url := r.URL         // net/url.URL
+	query := url.Query() // Values (map[string][]string)
+
+	q := query.Get("page")
+	if q == "" {
+		return 1
+	}
+
+	page, err := strconv.Atoi(q)
+	if err != nil {
+		return 1
+	}
+	return page
 }
