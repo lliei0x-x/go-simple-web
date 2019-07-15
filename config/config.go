@@ -44,3 +44,24 @@ func GetSessionConfig() (store, sessionName, flashName string) {
 	flashName = viper.GetString("session.flashName")
 	return
 }
+
+// GetSMTPConfig func
+func GetSMTPConfig() (server string, port int, user, pwd string) {
+	server = viper.GetString("mail.smtp")
+	port = viper.GetInt("mail.smtp-port")
+	user = viper.GetString("mail.user")
+	pwd = viper.GetString("mail.password")
+	return
+}
+
+// GetServerURL func
+func GetServerURL() (url string) {
+	url = viper.GetString("server.url")
+	return
+}
+
+// GetServerSecret func
+func GetServerSecret() (s string) {
+	s = viper.GetString("server.secret")
+	return
+}

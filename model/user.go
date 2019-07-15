@@ -6,9 +6,20 @@ import (
 
 	"go-simple-web/common"
 	"go-simple-web/config"
+
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
-var db = config.POSTGRES
+var (
+	db     = config.POSTGRES
+	secret = config.GetServerSecret()
+)
+
+const (
+	avatarURL = "https://www.gravatar.com/avatar/%s?d=retro" // https://en.gravatar.com/site/implement/images
+	lastSeen  = "last_seen"
+	aboutMe   = "about_me"
+)
 
 // User struct
 type User struct {
@@ -23,17 +34,17 @@ type User struct {
 	Followers    []*User `gorm:"many2many:follower;association_jointable_foreignkey:follower_id"`
 }
 
-// SetPasswordHash ...
+// SetPasswordHash func
 func (u *User) SetPasswordHash(pwd string) {
 	u.PasswordHash = common.GeneratePasswordHash(pwd)
 }
 
-// CheckPassword ...
+// CheckPassword func
 func (u *User) CheckPassword(pwd string) bool {
 	return common.GeneratePasswordHash(pwd) == u.PasswordHash
 }
 
-// GetUserByUsername ...
+// GetUserByUsername func
 func GetUserByUsername(username string) (*User, error) {
 	var user User
 	if err := db.Where("username=?", username).Find(&user).Error; err != nil {
@@ -42,9 +53,45 @@ func GetUserByUsername(username string) (*User, error) {
 	return &user, nil
 }
 
+// GetUserByEmail func
+func GetUserByEmail(email string) (*User, error) {
+	var user User
+	if err := db.Where("email=?", email).Find(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 // SetAvatar func
 func (u *User) SetAvatar(email string) {
-	u.Avatar = fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=retro", common.Md5(email)) // https://en.gravatar.com/site/implement/images
+	u.Avatar = fmt.Sprintf(avatarURL, common.Md5(email))
+}
+
+// GenerateToken func
+func (u *User) GenerateToken() (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": u.Username,
+		"exp":      time.Now().Add(time.Hour * 2).Unix(), // 可以添加过期时间
+	})
+	return token.SignedString([]byte(secret))
+}
+
+// CheckToken func
+func CheckToken(tokenString string) (string, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+		return []byte(secret), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims["username"].(string), nil
+	}
+	return "", err
 }
 
 // UpdateUserByUsername func
@@ -58,13 +105,13 @@ func UpdateUserByUsername(username string, contents map[string]interface{}) erro
 
 // UpdateLastSeen func
 func UpdateLastSeen(username string) error {
-	contents := map[string]interface{}{"last_seen": time.Now()}
+	contents := map[string]interface{}{lastSeen: time.Now()}
 	return UpdateUserByUsername(username, contents)
 }
 
 // UpdateAboutMe func
 func UpdateAboutMe(username, text string) error {
-	contents := map[string]interface{}{"about_me": text}
+	contents := map[string]interface{}{aboutMe: text}
 	return UpdateUserByUsername(username, contents)
 }
 

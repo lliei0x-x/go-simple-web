@@ -1,13 +1,17 @@
 package handle
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
 	"regexp"
 	"strconv"
 
+	"go-simple-web/config"
 	"go-simple-web/model"
+
+	"gopkg.in/gomail.v2"
 )
 
 // Login Check
@@ -54,6 +58,15 @@ func checkUserExist(username string) bool {
 	return false
 }
 
+func checkEmailExist(email string) bool {
+	_, err := model.GetUserByEmail(email)
+	if err != nil {
+		log.Println("Can not find email:", email)
+		return false
+	}
+	return true
+}
+
 func checkLogin(username, password string) []string {
 	var errs []string
 	if errCheck := checkUsername(username); len(errCheck) > 0 {
@@ -62,7 +75,7 @@ func checkLogin(username, password string) []string {
 	if errCheck := checkPassword(password); len(errCheck) > 0 {
 		errs = append(errs, errCheck)
 	}
-	if errCheck := checkUserPassword(username, password); !errCheck {
+	if isCheck := checkUserPassword(username, password); !isCheck {
 		errs = append(errs, "Username or password is not correct")
 	}
 	return errs
@@ -82,8 +95,19 @@ func checkRegister(username, email, pwd, repwd string) []string {
 	if errCheck := checkEmail(email); len(errCheck) > 0 {
 		errs = append(errs, errCheck)
 	}
-	if errCheck := checkUserExist(username); errCheck {
+	if isCheck := checkUserExist(username); isCheck {
 		errs = append(errs, "Username already exist, please choose another username")
+	}
+	return errs
+}
+
+func checkResetPassword(email string) []string {
+	var errs []string
+	if errCheck := checkEmail(email); len(errCheck) > 0 {
+		errs = append(errs, errCheck)
+	}
+	if isCheck := checkEmailExist(email); !isCheck {
+		errs = append(errs, "Email does not register yet.Please Check email.")
 	}
 	return errs
 }
@@ -102,4 +126,23 @@ func getPage(r *http.Request) int {
 		return 1
 	}
 	return page
+}
+
+// sendEmail func
+func sendEmail(target, subject, content string) {
+	server, port, usr, pwd := config.GetSMTPConfig()
+	d := gomail.NewDialer(server, port, usr, pwd)
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", usr)
+	m.SetHeader("To", target)
+	m.SetAddressHeader("Cc", usr, "admin")
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", content)
+
+	if err := d.DialAndSend(m); err != nil {
+		log.Println("Email Error:", err)
+		return
+	}
 }
