@@ -101,13 +101,24 @@ func checkRegister(username, email, pwd, repwd string) []string {
 	return errs
 }
 
-func checkResetPassword(email string) []string {
+func checkResetPasswordRequest(email string) []string {
 	var errs []string
 	if errCheck := checkEmail(email); len(errCheck) > 0 {
 		errs = append(errs, errCheck)
 	}
 	if isCheck := checkEmailExist(email); !isCheck {
 		errs = append(errs, "Email does not register yet.Please Check email.")
+	}
+	return errs
+}
+
+func checkResetPassword(pwd1, pwd2 string) []string {
+	var errs []string
+	if pwd1 != pwd2 {
+		errs = append(errs, "2 password does not match")
+	}
+	if errCheck := checkPassword(pwd1); len(errCheck) > 0 {
+		errs = append(errs, errCheck)
 	}
 	return errs
 }

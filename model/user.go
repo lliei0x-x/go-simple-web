@@ -19,6 +19,7 @@ const (
 	avatarURL = "https://www.gravatar.com/avatar/%s?d=retro" // https://en.gravatar.com/site/implement/images
 	lastSeen  = "last_seen"
 	aboutMe   = "about_me"
+	pwdHash   = "password_hash"
 )
 
 // User struct
@@ -112,6 +113,12 @@ func UpdateLastSeen(username string) error {
 // UpdateAboutMe func
 func UpdateAboutMe(username, text string) error {
 	contents := map[string]interface{}{aboutMe: text}
+	return UpdateUserByUsername(username, contents)
+}
+
+// UpdatePassword func
+func UpdatePassword(username, password string) error {
+	contents := map[string]interface{}{pwdHash: common.Md5(password)}
 	return UpdateUserByUsername(username, contents)
 }
 

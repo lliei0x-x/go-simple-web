@@ -10,3 +10,11 @@ session:
   store: "something-very-secret"
   sessionName: "go-simple-web"
   flashName: "go-flash"
+mail:
+  smtp: "smtp-server"
+  smtp-port: "$PORT"
+  user: "user"
+  password: "pwd"
+server:
+  url: "$URL"
+  secret: "go-simple-web"

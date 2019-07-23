@@ -9,22 +9,22 @@ import (
 	"go-simple-web/view"
 )
 
-func resetPWDHandle(w http.ResponseWriter, r *http.Request) {
-	resetPWDVM := view.RegisterVMInstance{}
-	vm := resetPWDVM.GetVM()
+func resetPWDRequestHandler(w http.ResponseWriter, r *http.Request) {
+	resetPWDRequestVM := view.ResetPWDRequestVMInstance{}
+	vm := resetPWDRequestVM.GetVM()
 
 	if r.Method == http.MethodGet {
-		templates["reset_password"].Execute(w, &vm)
+		templates["reset_pwd_request"].Execute(w, &vm)
 	}
 	if r.Method == http.MethodPost {
 		r.ParseForm()
 		email := r.Form.Get("email")
 
-		errs := checkResetPassword(email)
+		errs := checkResetPasswordRequest(email)
 		vm.AddErrInfo(errs...)
 
 		if len(errs) > 0 {
-			templates["reset_password"].Execute(w, &vm)
+			templates["reset_pwd_request"].Execute(w, &vm)
 
 		} else {
 			log.Println("Send mail to", email)

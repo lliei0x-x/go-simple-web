@@ -1,8 +1,9 @@
 package view
 
 import (
-	"go-simple-web/model"
 	"time"
+
+	"go-simple-web/model"
 )
 
 // ProfileVM struct

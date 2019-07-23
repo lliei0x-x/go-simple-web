@@ -1,6 +1,8 @@
 package view
 
-import "go-simple-web/model"
+import (
+	"go-simple-web/model"
+)
 
 // ExploreViewModel struct
 type ExploreViewModel struct {

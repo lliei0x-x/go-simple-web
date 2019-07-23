@@ -1,5 +1,9 @@
 package view
 
+import (
+	"go-simple-web/model"
+)
+
 // ResetPWDVM struct
 type ResetPWDVM struct {
 	LoginVM
@@ -17,4 +21,14 @@ func (ResetPWDVMInstance) GetVM(token string) ResetPWDVM {
 	vm.Token = token
 
 	return vm
+}
+
+// CheckToken func
+func CheckToken(tokenString string) (string, error) {
+	return model.CheckToken(tokenString)
+}
+
+// ResetUserPassword func
+func ResetUserPassword(username, password string) error {
+	return model.UpdatePassword(username, password)
 }
