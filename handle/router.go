@@ -10,6 +10,7 @@ import (
 // RegisterRouter ...
 func RegisterRouter() {
 	r := mux.NewRouter() // 匹配
+	r.NotFoundHandler = http.HandlerFunc(notfoundHandler)
 
 	r.HandleFunc("/", middleAuth(indexHandler))
 	r.HandleFunc("/explore", middleAuth(exploreHandler))
@@ -22,6 +23,7 @@ func RegisterRouter() {
 	r.HandleFunc("/unfollow/{username}", middleAuth(unFollowHandler))
 	r.HandleFunc("/reset_password_request", resetPWDRequestHandler)
 	r.HandleFunc("/reset_password/{token}", resetPWDHandler)
+	r.HandleFunc("/404", notfoundHandler)
 	http.Handle("/", r)
 
 	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))

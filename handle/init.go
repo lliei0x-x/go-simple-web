@@ -29,12 +29,10 @@ func getTemplates() {
 	if files, err = common.GetAllFiles(dirPath, files, ".html"); err != nil {
 		log.Fatal(err)
 	}
-
 	templatesMap := make(map[string]*template.Template)
 	for _, v := range files {
-		if strings.Contains(v, "_base.html") {
-			layout = template.Must(template.ParseFiles(v))
-		} else {
+		layout = template.Must(template.ParseFiles(dirPath + "/_base.html"))
+		if !strings.Contains(v, "_base.html") {
 			tmpl = template.Must(layout.Clone())
 			if _, err = tmpl.ParseFiles(v); err != nil {
 				log.Fatal(err)
@@ -45,3 +43,5 @@ func getTemplates() {
 	}
 	templates = templatesMap
 }
+
+//if !strings.Contains(v, "404.html")
